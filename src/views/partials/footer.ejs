@@ -1,0 +1,25 @@
+    </main>
+    <footer class="container py-8 text-center text-gray-500">
+      <small>© <%= new Date().getFullYear() %> Links</small>
+    </footer>
+  </body>
+  </html>
+  <script>
+    document.addEventListener('click', (e) => {
+      const openBtn = e.target.closest('[data-open-modal]');
+      if (openBtn) {
+        const id = openBtn.getAttribute('data-open-modal');
+        const dlg = document.getElementById(id);
+        if (dlg && dlg.showModal) dlg.showModal();
+      }
+      const submitBtn = e.target.closest('[data-submit]');
+      if (submitBtn) {
+        const sel = submitBtn.getAttribute('data-submit');
+        const form = document.querySelector(sel);
+        if (form) form.submit();
+      }
+    });
+  </script>
+
+
+

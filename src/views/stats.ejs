@@ -1,0 +1,243 @@
+<%- include('partials/header', { title: 'Statistics', user }) %>
+
+<section class="card bg-base-100 shadow">
+  <div class="card-body">
+    <h2 class="card-title">Statistics for <code>/s/<%= link.code %></code></h2>
+    <p class="text-base-content/60 mb-4">
+      <a class="link link-primary" href="<%= link.url %>" target="_blank"
+        ><%= link.url %></a
+      >
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="card bg-base-100 border shadow-sm">
+        <div class="text-sm text-gray-600">Total</div>
+        <div class="text-2xl font-semibold"><%= totals.total %></div>
+      </div>
+      <div class="card bg-base-100 border shadow-sm">
+        <div class="text-sm text-gray-600">Humanos</div>
+        <div class="text-2xl font-semibold"><%= totals.humans %></div>
+      </div>
+      <div class="card bg-base-100 border shadow-sm">
+        <div class="text-sm text-gray-600">Bots</div>
+        <div class="text-2xl font-semibold"><%= totals.bots %></div>
+      </div>
+    </div>
+    <div class="text-base-content/60 mt-3">
+      <div>Created: <%= formatDate(link.created_at) %></div>
+      <% if (link.first_clicked_at) { %>
+      <div>First click: <%= formatDate(link.first_clicked_at) %></div>
+      <% } %> <% if (link.last_clicked_at) { %>
+      <div>Last click: <%= formatDate(link.last_clicked_at) %></div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<section class="card bg-base-100 shadow">
+  <div class="card-body">
+    <h3 class="card-title">Clicks per day (last 30)</h3>
+    <form
+      class="mb-4 grid grid-cols-1 md:grid-cols-5 gap-2"
+      method="get"
+      action=""
+    >
+      <input
+        class="input"
+        type="date"
+        name="from"
+        value="<%= (filters && filters.from) ? filters.from : '' %>"
+      />
+      <input
+        class="input"
+        type="date"
+        name="to"
+        value="<%= (filters && filters.to) ? filters.to : '' %>"
+      />
+      <label class="inline-flex items-center gap-2"
+        ><input type="checkbox" name="humansOnly" value="1" <%= (filters &&
+        filters.humansOnly) ? 'checked' : '' %> /> Humans only</label
+      >
+      <button class="btn" type="submit">
+        <i class="ti ti-filter mr-1"></i>
+        Filter
+      </button>
+      <a class="btn btn-primary" href="<%= exportUrl %>">
+        <i class="ti ti-download mr-1"></i>
+        Export CSV
+      </a>
+    </form>
+    <% if (!perDay || perDay.length === 0) { %>
+    <p class="text-base-content/60">No data.</p>
+    <% } else { %>
+    <canvas id="chartPerDay" height="120"></canvas>
+    <div class="overflow-x-auto mt-4">
+      <table class="table">
+        <thead>
+          <tr class="text-left">
+            <th>Day</th>
+            <th>Clicks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% perDay.forEach(r => { %>
+          <tr>
+            <td><%= r.day %></td>
+            <td><%= r.c %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="card bg-base-100 shadow">
+  <div class="card-body">
+    <h3 class="card-title">Top Referrers</h3>
+    <% if (!topReferers || topReferers.length === 0) { %>
+    <p class="muted">No data.</p>
+    <% } else { %>
+    <canvas id="chartReferers" height="120"></canvas>
+    <div class="overflow-x-auto mt-4">
+      <table class="table">
+        <thead>
+          <tr class="text-left">
+            <th>Referer</th>
+            <th>Clicks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% topReferers.forEach(r => { %>
+          <tr>
+            <td><%= r.k %></td>
+            <td><%= r.c %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="card bg-base-100 shadow">
+  <div class="card-body">
+    <h3 class="card-title">Top Languages</h3>
+    <% if (!topLangs || topLangs.length === 0) { %>
+    <p class="muted">No data.</p>
+    <% } else { %>
+    <canvas id="chartLangs" height="120"></canvas>
+    <div class="overflow-x-auto mt-4">
+      <table class="table">
+        <thead>
+          <tr class="text-left">
+            <th>Language</th>
+            <th>Clicks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% topLangs.forEach(r => { %>
+          <tr>
+            <td><%= r.lang %></td>
+            <td><%= r.c %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="card bg-base-100 shadow">
+  <div class="card-body">
+    <h3 class="card-title">Last 50 clicks</h3>
+    <% if (!lastClicks || lastClicks.length === 0) { %>
+    <p class="muted">No data.</p>
+    <% } else { %>
+    <div class="overflow-x-auto">
+      <table class="table">
+        <thead>
+          <tr class="text-left">
+            <th>Date</th>
+            <th>Referer</th>
+            <th>UA</th>
+            <th>Lang</th>
+            <th>Bot</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% lastClicks.forEach(r => { %>
+          <tr>
+            <td><%= formatDate(r.clicked_at) %></td>
+            <td class="truncate"><%= r.referer || '(direct)' %></td>
+            <td class="truncate"><%= r.user_agent || '' %></td>
+            <td><%= r.accept_language || '' %></td>
+            <td><%= r.is_bot ? 'yes' : 'no' %></td>
+            <td><%= r.ip_trunc || '' %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<div class="container py-4">
+  <a class="btn" href="/links"><i class="ti ti-arrow-left mr-1"></i>Back</a>
+  <a class="btn btn-primary" target="_blank" href="/s/<%= link.code %>">
+    <i class="ti ti-external-link mr-1"></i>
+    Open
+  </a>
+  <a class="btn btn-secondary" target="_blank" href="<%= link.url %>">
+    <i class="ti ti-link mr-1"></i>
+    Destination
+  </a>
+</div>
+
+<script src="/vendor/chartjs/chart.umd.js"></script>
+<script>
+  (function(){
+    const perDay = <%- JSON.stringify(perDay || []) %>;
+    if (perDay.length) {
+      const ctx = document.getElementById('chartPerDay');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: perDay.map(r => r.day),
+          datasets: [{ label: 'Clicks', data: perDay.map(r => r.c), borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.2)', tension: 0.25 }]
+        },
+        options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+      });
+    }
+    const topReferers = <%- JSON.stringify(topReferers || []) %>;
+    if (topReferers.length) {
+      const ctx = document.getElementById('chartReferers');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: topReferers.map(r => r.k),
+          datasets: [{ label: 'Clicks', data: topReferers.map(r => r.c), backgroundColor: '#10b981' }]
+        },
+        options: { plugins: { legend: { display: false } }, indexAxis: 'y', scales: { x: { beginAtZero: true } } }
+      });
+    }
+    const topLangs = <%- JSON.stringify(topLangs || []) %>;
+    if (topLangs.length) {
+      const ctx = document.getElementById('chartLangs');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: topLangs.map(r => r.lang),
+          datasets: [{ label: 'Clicks', data: topLangs.map(r => r.c), backgroundColor: '#f59e0b' }]
+        },
+        options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+      });
+    }
+  })();
+</script>
+
+<%- include('partials/footer') %>

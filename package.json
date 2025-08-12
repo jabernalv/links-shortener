@@ -1,0 +1,52 @@
+{
+  "name": "links-shortener",
+  "version": "1.0.0",
+  "description": "URL shortener with authentication using Node.js, Express and SQLite",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "NODE_ENV=production node src/index.js",
+    "dev": "concurrently -n css,web -c green,blue \"npm:dev:css\" \"nodemon src/index.js\"",
+    "build:css": "tailwindcss -c tailwind.config.js -i src/styles/input.css -o src/public/style.css --minify",
+    "dev:css": "tailwindcss -c tailwind.config.js -i src/styles/input.css -o src/public/style.css --watch"
+  },
+  "keywords": [
+    "shortener",
+    "links",
+    "express",
+    "sqlite"
+  ],
+  "author": "Jairo Abraham Bernal Villanueva",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jabernalv/links-shortener.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jabernalv/links-shortener/issues"
+  },
+  "homepage": "https://github.com/jabernalv/links-shortener#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.6.0",
+    "@tabler/icons-webfont": "^3.34.1",
+    "chart.js": "^4.4.4",
+    "qrcode": "^1.5.4",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.2",
+    "morgan": "^1.10.1",
+    "nanoid": "^5.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.0",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.10",
+    "daisyui": "^4.12.14"
+  }
+}

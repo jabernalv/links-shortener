@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= typeof title !== 'undefined' ? title : 'Enlaces' %></title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container">
+        <h1 class="brand"><a href="/links">Enlaces</a></h1>
+        <nav>
+          <% if (typeof user !== 'undefined' && user) { %>
+          <span class="user">👤 <%= user.username %></span>
+          <a class="btn" href="/logout">Salir</a>
+          <% } else { %>
+          <a class="btn" href="/login">Entrar</a>
+          <% } %>
+        </nav>
+      </div>
+    </header>
+    <main class="container"><%- body %></main>
+    <footer class="footer container">
+      <small>© <%= new Date().getFullYear() %> Enlaces</small>
+    </footer>
+  </body>
+</html>
+

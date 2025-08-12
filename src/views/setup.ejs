@@ -1,0 +1,31 @@
+<%- include('partials/header', { title: 'Initial setup', user: null }) %>
+<section class="card bg-base-100 shadow">
+  <div class="card-body">
+    <h2 class="card-title">Create admin user</h2>
+    <% if (error) { %>
+    <div class="alert alert-error"><%= error %></div>
+    <% } %>
+    <form method="post" action="/setup" class="grid gap-3">
+      <label class="form-control w-full">
+        <div class="label"><span class="label-text">Username</span></div>
+        <input
+          class="input input-bordered w-full"
+          type="text"
+          name="username"
+          required
+        />
+      </label>
+      <label class="form-control w-full">
+        <div class="label"><span class="label-text">Password</span></div>
+        <input
+          class="input input-bordered w-full"
+          type="password"
+          name="password"
+          required
+        />
+      </label>
+      <button class="btn btn-primary mt-2" type="submit">Create</button>
+    </form>
+  </div>
+</section>
+<%- include('partials/footer') %>
