@@ -39,7 +39,7 @@ Supported variables:
 
 - `SESSION_SECRET` (required in production)
 - `PORT` (optional, default 8085)
-- `SQLITE_PATH` (optional, default `./data/data.sqlite`)
+- `SQLITE_PATH` (optional, default `./data/links-shortener.sqlite`)
 - `IP_HASH_SALT` (optional, salt for hashing IP addresses in metrics)
 
 Recommended `.env` example:
@@ -148,7 +148,7 @@ Data is persisted via `./data:/app/data`. For backups:
 ```bash
 sudo apt-get install -y sqlite3
 mkdir -p backups
-sqlite3 data/data.sqlite ".backup 'backups/data-$(date +%F-%H%M%S).sqlite'"
+sqlite3 data/links-shortener.sqlite ".backup 'backups/links-shortener-$(date +%F-%H%M%S).sqlite'"
 ```
 
 **Option B (cold copy):**
@@ -156,7 +156,7 @@ sqlite3 data/data.sqlite ".backup 'backups/data-$(date +%F-%H%M%S).sqlite'"
 ```bash
 docker stop links-shortener
 mkdir -p backups
-cp data/data.sqlite backups/data-$(date +%F-%H%M%S).sqlite
+cp data/links-shortener.sqlite backups/links-shortener-$(date +%F-%H%M%S).sqlite
 docker start links-shortener
 ```
 
@@ -164,7 +164,7 @@ docker start links-shortener
 
 ```bash
 docker stop links-shortener
-cp backups/data-YYYY-MM-DD-HHMMSS.sqlite data/data.sqlite
+cp backups/links-shortener-YYYY-MM-DD-HHMMSS.sqlite data/links-shortener.sqlite
 docker start links-shortener
 ```
 

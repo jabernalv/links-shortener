@@ -3,7 +3,8 @@ const fs = require("fs");
 const Database = require("better-sqlite3");
 
 const DB_PATH =
-  process.env.SQLITE_PATH || path.join(__dirname, "../../data/data.sqlite");
+  process.env.SQLITE_PATH ||
+  path.join(__dirname, "../../data/links-shortener.sqlite");
 
 let dbInstance;
 
